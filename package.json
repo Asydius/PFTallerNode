@@ -1,0 +1,28 @@
+{
+  "name": "pftallernode",
+  "version": "1.0.0",
+  "description": "Proyecto final del taller Node",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Asydius/PFTallerNode.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Express.js",
+    "JavaScript"
+  ],
+  "author": "Ivan Carrillo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Asydius/PFTallerNode/issues"
+  },
+  "homepage": "https://github.com/Asydius/PFTallerNode#readme"
+}
