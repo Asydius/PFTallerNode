@@ -3,7 +3,8 @@ const morgan = require('morgan');
 const express = require('express');
 const app = express();
 //Routes
-const user = require('./routes/user');
+const login = require('./routes/login');
+const users = require('./routes/users');
 //Middleware
 const auth = require('./middleware/auth');
 const notFound = require('./middleware/notFound');
@@ -17,8 +18,9 @@ app.use(express.urlencoded({extended: true}));
 
 //Main
 app.get('/', index);
-app.use('/user', user);
+app.use('/login', login);
 app.use(auth);
+app.use('/users', users);
 app.use(notFound);
 
 app.listen(process.env.PORT || 3000, () => {
