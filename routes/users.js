@@ -10,25 +10,21 @@ users.get('/', async (req, res, next) => {
 });
 
 users.get('/:id([0-9]{1,3})', async (req, res, next) => {
-    const id = req.params.id-1;
-    if (id >= 1 && id <= id.lenght) {
-        const user = await db.query("SELECT * FROM users WHERE user_id="+ id + ";");
-        return res.status(200).json({code: 200, message: user});
-    }
-    else{
-        return res.status(404).json({code: 404, message:"Usuario no encontrado."})
-    }
+    const id = req.params.id;
+    const user = await db.query("SELECT * FROM users WHERE user_id="+ id + ";");
+    
+    (user[0] == null) ?
+    res.status(404).json({code: 404, message:"Usuario no encontrado."}) :
+    res.status(200).json({code: 200, message: user});
 });
 
 users.get('/:name([A-Za-z]+)', async (req, res, next) => {
-    const fname = req.params.name;
-    
-    const user = await db.query("SELECT * FROM users WHERE user_fname='"+ fname + "';");
-    console.log(user);
+    const name = req.params.name;
+    const user = await db.query("SELECT * FROM users WHERE user_fname='"+ name + "' OR user_lname='"+ name + "';");
 
-    (user.lenght == 1) ? 
-    res.status(200).json({code: 200, message: user}) : 
-    res.status(404).json({code: 404, message: "Usuario no encontrado"});
+    (user[0] == null) ? 
+    res.status(200).json({code: 200, message: "Usuario no encontrado."}) : 
+    res.status(404).json({code: 404, message: user});
 
 });
 
@@ -36,7 +32,7 @@ users.get('/:name([A-Za-z]+)', async (req, res, next) => {
 users.post('/', async (req, res, next) => {
     const {user_fname, user_lname, user_phone, user_mail, user_address, user_password} = req.body;
     
-    if(user_mail && user_password){
+    if(user_fname && user_lname && user_phone && user_mail && user_address && user_password){
     let query = "INSERT INTO users (user_fname, user_lname, user_phone, user_mail, user_address, user_password)";
     query += ` VALUES ('${user_fname}', '${user_lname}', '${user_phone}', '${user_mail}', '${user_address}', '${user_password}')`;
     
