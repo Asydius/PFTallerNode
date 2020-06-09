@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const login = express.Router();
 const db = require('../config/db'); 
 
-// user.post('/signin', async (req,res,next) => {
+// login.post('/signin', async (req,res,next) => {
 //     const {user_fname, user_lname, user_phone, user_mail, user_address, user_password} = req.body
     
 //     if(user_name && user_mail && user_password){
@@ -21,7 +21,7 @@ const db = require('../config/db');
 
 login.post("/login", async (req,res,next) => {
     const {user_mail, user_password} = req.body;
-    const query = `SELECT * FROM user WHERE user_mail = '${user_mail}' AND user_password = '${user_password}';`;
+    const query = `SELECT * FROM users WHERE user_mail = '${user_mail}' AND user_password = '${user_password}';`;
     const rows = await db.query(query);
 
     if(user_mail && user_password){

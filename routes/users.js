@@ -12,7 +12,7 @@ users.get('/', async (req, res, next) => {
 users.get('/:id([0-9]{1,3})', async (req, res, next) => {
     const id = req.params.id-1;
     if (id >= 1 && id <= id.lenght) {
-        const user = await db.query("SELECT * FROM users WHERE user_id="+ id +";");
+        const user = await db.query("SELECT * FROM users WHERE user_id="+ id + ";");
         return res.status(200).json({code: 200, message: user});
     }
     else{
@@ -21,13 +21,14 @@ users.get('/:id([0-9]{1,3})', async (req, res, next) => {
 });
 
 users.get('/:name([A-Za-z]+)', async (req, res, next) => {
-    const name = req.params.name;
-    console.log(req.params);
-    const user = await db.query("SELECT * FROM users WHERE user_fname"+ name +";");
+    const fname = req.params.name;
+    
+    const user = await db.query("SELECT * FROM users WHERE user_fname='"+ fname + "';");
+    console.log(user);
 
-    (user.lenght > 0) ? 
+    (user.lenght == 1) ? 
     res.status(200).json({code: 200, message: user}) : 
-    res.status(404).json({code: 1, message: "Usuario no encontrado"});
+    res.status(404).json({code: 404, message: "Usuario no encontrado"});
 
 });
 
@@ -35,12 +36,12 @@ users.get('/:name([A-Za-z]+)', async (req, res, next) => {
 users.post('/', async (req, res, next) => {
     const {user_fname, user_lname, user_phone, user_mail, user_address, user_password} = req.body;
     
-    if(user_fname && user_lname && user_phone && user_mail && user_address && user_password){
+    if(user_mail && user_password){
     let query = "INSERT INTO users (user_fname, user_lname, user_phone, user_mail, user_address, user_password)";
     query += ` VALUES ('${user_fname}', '${user_lname}', '${user_phone}', '${user_mail}', '${user_address}', '${user_password}')`;
     
     const rows = await db.query(query);
-
+    
     (rows.affectedRows == 1) ?
         res.status(201).json({code: 201, message: "Usuario insertado correctamente."}) :
         res.status(500).json({code: 500, message: "Ocurrió un error"});
@@ -49,31 +50,80 @@ users.post('/', async (req, res, next) => {
 
 //PUT
 users.put('/:id([0-9]{1,3})', async (req, res, next) => {
-    const {pok_name, pok_height, pok_weight, pok_base_experience} = req.body;
+    const {user_fname, user_lname, user_phone, user_mail, user_address, user_password} = req.body;
     
-    if(pok_name && pok_height && pok_weight && pok_base_experience){
-        let query = `UPDATE pokemon SET pok_name='${pok_name}', pok_height=${pok_height},`;
-        query += `pok_weight=${pok_height}, pok_base_experience=${pok_base_experience} WHERE pok_id=${req.params.id};`;
+    if(user_fname && user_lname && user_phone && user_mail && user_address && user_password){
+        let query = `UPDATE users SET user_fname='${user_fname}', user_lname='${user_lname}', user_phone='${user_phone}',`;
+        query += ` user_mail='${user_mail}', user_address='${user_address}', user_password='${user_password}'`;
+        query += ` WHERE user_id=${req.params.id};`;
     
     const rows = await db.query(query);
 
     (rows.affectedRows == 1) ?
-        res.status(200).json({code: 200, message: "Pokémon actualizado correctamente."}) :
+        res.status(200).json({code: 200, message: "Usuario actualizado correctamente."}) :
         res.status(500).json({code: 500, message: "Ocurrió un error"});
-    } 
+    }
+    return res.status(500).json({code: 500, message: "Campos incompletos."}); 
 });
 
 //PATCH
 users.patch('/:id([0-9]{1,3})', async (req, res, next) => {
-    if(req.body.pok_name){
-        let query = `UPDATE pokemon SET pok_name='${req.body.pok_name}' WHERE pok_id=${req.params.id};`;
+    //Nombre
+    if(req.body.user_fname){
+        let query = `UPDATE users SET user_fname='${req.body.user_fname}' WHERE user_id=${req.params.id};`;
         const rows = await db.query(query);
 
     (rows.affectedRows == 1) ?
-        res.status(200).json({code: 200, message: "Pokémon actualizado correctamente."}) :
+        res.status(200).json({code: 200, message: "Usuario actualizado correctamente."}) :
         res.status(500).json({code: 500, message: "Ocurrió un error"});
     }
-    return res.status(500).json({code: 500, message: "Campos imcompletos."});
+    //Apellido
+    if(req.body.user_lname){
+        let query = `UPDATE users SET user_lname='${req.body.user_lname}' WHERE user_id=${req.params.id};`;
+        const rows = await db.query(query);
+
+    (rows.affectedRows == 1) ?
+        res.status(200).json({code: 200, message: "Usuario actualizado correctamente."}) :
+        res.status(500).json({code: 500, message: "Ocurrió un error"});
+    }
+    //Número telefónico
+    if(req.body.user_phone){
+        let query = `UPDATE users SET user_phone='${req.body.user_phone}' WHERE user_id=${req.params.id};`;
+        const rows = await db.query(query);
+
+    (rows.affectedRows == 1) ?
+        res.status(200).json({code: 200, message: "Usuario actualizado correctamente."}) :
+        res.status(500).json({code: 500, message: "Ocurrió un error"});
+    }
+    //Email
+    if(req.body.user_mail){
+        let query = `UPDATE users SET user_mail='${req.body.user_mail}' WHERE user_id=${req.params.id};`;
+        const rows = await db.query(query);
+
+    (rows.affectedRows == 1) ?
+        res.status(200).json({code: 200, message: "Usuario actualizado correctamente."}) :
+        res.status(500).json({code: 500, message: "Ocurrió un error"});
+    }
+    //Dirección
+    if(req.body.user_address){
+        let query = `UPDATE users SET user_address='${req.body.user_address}' WHERE user_id=${req.params.id};`;
+        const rows = await db.query(query);
+
+    (rows.affectedRows == 1) ?
+        res.status(200).json({code: 200, message: "Usuario actualizado correctamente."}) :
+        res.status(500).json({code: 500, message: "Ocurrió un error"});
+    }
+    //PW
+    if(req.body.user_password){
+        let query = `UPDATE users SET user_password='${req.body.user_password}' WHERE user_id=${req.params.id};`;
+        const rows = await db.query(query);
+
+    (rows.affectedRows == 1) ?
+        res.status(200).json({code: 200, message: "Usuario actualizado correctamente."}) :
+        res.status(500).json({code: 500, message: "Ocurrió un error"});
+    }
+
+    return res.status(500).json({code: 500, message: "Campo vacio o incompleto."});
 });
 
 //DELETE

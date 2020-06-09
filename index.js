@@ -18,8 +18,8 @@ app.use(express.urlencoded({extended: true}));
 
 //Main
 app.get('/', index);
-app.use('/login', login);
-app.use(auth);
+// app.use('/login', login);
+// app.use(auth);
 app.use('/users', users);
 app.use(notFound);
 
