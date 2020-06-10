@@ -4,6 +4,7 @@ const util = require('util');
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
+    port: '3306',
     user: 'id14031815_iaca',
     password: '',
     database: 'id14031815_pftn'
