@@ -9,28 +9,29 @@ function init() {
                 'Authorization': "bearer" + localStorage.getItem("token")
             }   
         }
-        loadPokemon();
+        loadUsers();
     }
     else {
-        window.location.href = "index.html"
+        window.alert("No tienes permiso.");
+        window.location.href = "login.html"
     }
 }
 
-function loadPokemon() {
-    axios.get(url + "/pokemon", headers)
+function loadUsers() {
+    axios.get(url + "/users", headers)
     .then(function(res) {
         console.log(res);
-        displayPokemon(res.data.message);
+        displayUser(res.data.message);
     })
     .catch(function(error) {
         console.log(error);
     })
 }
 
-function displayPokemon(pokemon) {
+function displayUser(user) {
     var body = document.querySelector("body");
 
-    for(var i = 0; i < pokemon.length; i++) {
-        body.innerHTML += `<h3>${pokemon[i].pok_name}</h3>`
+    for(var i = 0; i < user.length; i++) {
+        body.innerHTML += `<h3>${user[i].user_fname}</h3>`
     }
 }

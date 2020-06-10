@@ -19,9 +19,9 @@ const db = require('../config/db');
 //     return res.status(500).json({code: 500, message: "Ocurrió un error."});
 // });
 
-login.post("/login", async (req,res,next) => {
+login.post("/", async (req,res,next) => {
     const {user_mail, user_password} = req.body;
-    const query = `SELECT * FROM users WHERE user_mail = '${user_mail}' AND user_password = '${user_password}';`;
+    const query = `SELECT * FROM admin WHERE user_mail = '${user_mail}' AND user_password = '${user_password}';`;
     const rows = await db.query(query);
 
     if(user_mail && user_password){
